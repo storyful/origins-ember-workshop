@@ -5,7 +5,8 @@ export default Ember.Component.extend({
   search: {
     query: '',
     latlng: '',
-    date: '',
+    from_date: '',
+    to_date: '',
     filter: [
       { type: 'platform', label: 'Instagram', value: true },
       { type: 'platform', label: 'YouTube',   value: true },
@@ -19,6 +20,12 @@ export default Ember.Component.extend({
 
   platformFilters: Ember.computed.filterBy('search.filter', 'type', 'platform'),
 
-  formatFilters: Ember.computed.filterBy('search.filter', 'type', 'format')
+  formatFilters: Ember.computed.filterBy('search.filter', 'type', 'format'),
+
+  actions: {
+    updateSearch(){
+      this.sendAction('onUpdate', this.get('search'));
+    }
+  }
 
 });
