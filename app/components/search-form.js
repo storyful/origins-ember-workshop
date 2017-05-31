@@ -1,8 +1,7 @@
 import Ember from 'ember';
 
-export default Ember.Component.extend({
-
-  search: {
+function serializeQueryParams(){
+  return {
     query: '',
     latlng: '',
     from_date: '',
@@ -17,11 +16,16 @@ export default Ember.Component.extend({
       { type: 'format',   label: 'Image',     value: true }
     ],
     sort_by: 'newest'
+  };
+}
+
+export default Ember.Component.extend({
+
+  search: {},
+
+  didInsertElement(){
+    this.set('search', serializeQueryParams());
   },
-
-  platformFilters: Ember.computed.filterBy('search.filter', 'type', 'platform'),
-
-  formatFilters: Ember.computed.filterBy('search.filter', 'type', 'format'),
 
   actions: {
     updateSearch(){
@@ -32,6 +36,10 @@ export default Ember.Component.extend({
       this.set('search.sort_by', value);
       this.sendAction('updateSearch');
     }
-  }
+  },
+
+  platformFilters: Ember.computed.filterBy('search.filter', 'type', 'platform'),
+
+  formatFilters: Ember.computed.filterBy('search.filter', 'type', 'format'),
 
 });
