@@ -17,7 +17,8 @@ export default Ember.Controller.extend({
     'platforms',
     'formats',
     'latlng',
-    'page'
+    'page',
+    'sort_by'
   ],
 
   searchValues: Ember.computed('queryParams', function(){
@@ -36,9 +37,11 @@ export default Ember.Controller.extend({
       this.set('latlng', queryParams.latlng || undefined);
       this.set('from_date', queryParams.from_date || undefined);
       this.set('to_date', queryParams.to_date || undefined);
+
       this.set('platforms', filterToQueryParam(queryParams.filter, 'platform') );
       this.set('formats', filterToQueryParam(queryParams.filter, 'format') );
 
+      this.set('sort_by', queryParams.sort_by || undefined );
     }
   }
 

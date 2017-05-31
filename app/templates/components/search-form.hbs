@@ -1,0 +1,37 @@
+<div class="search-form--row">
+  <div class="search-form--input">
+    {{input value=search.query placeholder="Query"}}
+  </div>
+
+  <div class="search-form--input">
+    {{input value=search.latlng placeholder="Latitude / Longitude"}}
+  </div>
+
+  <div class="search-form--input">
+    {{input value=search.from_date placeholder="From"}}
+    {{input value=search.to_date placeholder="To"}}
+  </div>
+</div>
+
+<div class="search-form--row flex-none text-center">
+  <div class="search-form--input search-form--input-sort">
+    <span class="search-form--sort-by {{if (eq search.sort_by 'oldest') 'is-selected'}}" {{action 'updateSortBy' 'oldest'}}>Oldest</span>
+    <span class="search-form--sort-by {{if (eq search.sort_by 'newest') 'is-selected'}}" {{action 'updateSortBy' 'newest'}}>Newest</span>
+  </div>
+
+  <div class="search-form--input text-center flex-none">
+    {{#each formatFilters as |filter|}}
+      {{search-form-checkbox label=filter.label value=filter.value}}
+    {{/each}}
+  </div>
+
+  <div class="search-form--input text-center">
+    {{#each platformFilters as |filter|}}
+      {{search-form-checkbox label=filter.label value=filter.value}}
+    {{/each}}
+  </div>
+
+  <div class="search-form--input search-form--input-submit text-right">
+    <button class="btn" {{action "updateSearch"}}>Search</button>
+  </div>
+</div>

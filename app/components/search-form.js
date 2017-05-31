@@ -16,6 +16,7 @@ export default Ember.Component.extend({
       { type: 'format',   label: 'Video',     value: true },
       { type: 'format',   label: 'Image',     value: true }
     ],
+    sort_by: 'newest'
   },
 
   platformFilters: Ember.computed.filterBy('search.filter', 'type', 'platform'),
@@ -25,6 +26,11 @@ export default Ember.Component.extend({
   actions: {
     updateSearch(){
       this.sendAction('onUpdate', this.get('search'));
+    },
+
+    updateSortBy(value){
+      this.set('search.sort_by', value);
+      this.sendAction('updateSearch');
     }
   }
 
