@@ -24,7 +24,12 @@ export default function() {
     http://www.ember-cli-mirage.com/docs/v0.3.x/shorthands/
   */
 
+  this.namespace = 'api';
+  this.timing = 400;
+
   this.passthrough('/assets/**');
+
+  this.resource('contents');
 
   this.passthrough();
 }
