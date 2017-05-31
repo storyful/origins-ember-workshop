@@ -14,7 +14,8 @@ export default Ember.Route.extend({
   },
 
   model(params){
-    let contents = params.query ? [{},{},{},{}] : null;
+    let contents = params.query ? this.store.findAll('content') : null;
+
     return Ember.RSVP.hash({ contents });
   }
 
