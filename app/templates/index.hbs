@@ -1,3 +1,11 @@
-{{search-form searchValues=searchValues onUpdate="updateQueryParams"}}
+<header class="app--header">
+  <div class="app-header">
+    <div class="app-header--logo"></div>
+  </div>
 
-{{search-results model=model}}
+  {{search-form searchValues=searchValues onUpdate="updateQueryParams"}}
+</header>
+
+<div class="app--main">
+  {{search-results model=model}}
+</div>
