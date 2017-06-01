@@ -13,10 +13,18 @@ export default Ember.Route.extend({
     sort_by:   { refreshModel: true }
   },
 
-  model(params){
-    let contents = params.query ? this.store.findAll('content') : null;
+  beforeModel(){
+    this.store.unloadAll('content');
+  },
 
-    return Ember.RSVP.hash({ contents });
+  model(params){
+    let hash = {};
+
+    if(params.query){
+      hash.contents = this.store.findAll('content');
+    }
+
+    return Ember.RSVP.hash(hash);
   }
 
 });
