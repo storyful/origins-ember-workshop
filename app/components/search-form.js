@@ -1,30 +1,38 @@
 import Ember from 'ember';
 
-function serializeQueryParams(){
-  return {
+let { get, set } = Ember;
+
+function serializeSearchFilter(type, search, params){
+  return get(search, 'filter').map(filter => {
+      if(filter.type === type){
+        set(filter, 'value', get(params, type).split(',').indexOf( filter.label ) > -1)
+      }
+      return filter;
+    })
+}
+
+export default Ember.Component.extend({
+
+  search: {
     query: '',
     latlng: '',
     from_date: '',
     to_date: '',
     filter: [
-      { type: 'platform', label: 'Instagram', value: true },
-      { type: 'platform', label: 'YouTube',   value: true },
-      { type: 'platform', label: 'Facebook',  value: true },
-      { type: 'platform', label: 'YouTube',   value: true },
-      { type: 'platform', label: 'Twitter',   value: true },
-      { type: 'format',   label: 'Video',     value: true },
-      { type: 'format',   label: 'Image',     value: true }
+      { type: 'platforms', label: 'Instagram', value: true },
+      { type: 'platforms', label: 'YouTube',   value: true },
+      { type: 'platforms', label: 'Facebook',  value: true },
+      { type: 'platforms', label: 'YouTube',   value: true },
+      { type: 'platforms', label: 'Twitter',   value: true },
+      { type: 'formats',   label: 'Video',     value: true },
+      { type: 'formats',   label: 'Image',     value: true }
     ],
     sort_by: 'newest'
-  };
-}
+  },
 
-export default Ember.Component.extend({
-
-  search: {},
-
-  didInsertElement(){
-    this.set('search', serializeQueryParams());
+  didReceiveAttrs(){
+    this._super(...arguments);
+    this.serializeParams( this.get('params') );
   },
 
   actions: {
@@ -38,8 +46,18 @@ export default Ember.Component.extend({
     }
   },
 
-  platformFilters: Ember.computed.filterBy('search.filter', 'type', 'platform'),
+  platformFilters: Ember.computed.filterBy('search.filter', 'type', 'platforms'),
 
-  formatFilters: Ember.computed.filterBy('search.filter', 'type', 'format'),
+  formatFilters: Ember.computed.filterBy('search.filter', 'type', 'formats'),
+
+  serializeParams(){
+    this.set('search.query',      this.get('params.query'));
+    this.set('search.latlng',     this.get('params.latlng'));
+    this.set('search.from_date',  this.get('params.to_date'));
+    this.set('search.sort_by',    this.get('params.sort_by'));
+
+    this.set('search.filter', serializeSearchFilter('platforms', this.get('search'), this.get('params')) );
+    this.set('search.filter', serializeSearchFilter('formats', this.get('search'), this.get('params')) );
+  }
 
 });

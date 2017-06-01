@@ -18,7 +18,7 @@ export default Ember.Route.extend({
   },
 
   model(params){
-    let hash = {};
+    let hash = { params };
 
     if(params.query){
       hash.contents = this.store.findAll('content');

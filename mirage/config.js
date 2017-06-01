@@ -2,7 +2,7 @@ function random(min, max){
   return Math.floor(Math.random() * max) + min;
 }
 
-function paginate (array, pageSize, pageNumber) {
+function paginate(array, pageSize, pageNumber) {
   --pageNumber;
   return array.slice(pageNumber * pageSize, (pageNumber + 1) * pageSize);
 }
@@ -10,7 +10,7 @@ function paginate (array, pageSize, pageNumber) {
 export default function() {
 
   this.namespace = 'api';
-  this.timing = 2000;
+  this.timing = 1000;
 
   this.passthrough('/assets/**');
 

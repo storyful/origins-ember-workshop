@@ -20,15 +20,6 @@ export default Ember.Controller.extend({
     'sort_by'
   ],
 
-  searchValues: Ember.computed('queryParams', function(){
-    return this.get('queryParams').map(queryParam => {
-      return {
-        name: queryParam,
-        value: this.get(queryParam)
-      }
-    })
-  }),
-
   actions: {
     updateQueryParams(queryParams){
       this.set('query',     queryParams.query || undefined);
@@ -37,8 +28,8 @@ export default Ember.Controller.extend({
       this.set('from_date', queryParams.from_date || undefined);
       this.set('to_date',   queryParams.to_date || undefined);
 
-      this.set('platforms', filterToQueryParam(queryParams.filter, 'platform') );
-      this.set('formats',   filterToQueryParam(queryParams.filter, 'format') );
+      this.set('platforms', filterToQueryParam(queryParams.filter, 'platforms') );
+      this.set('formats',   filterToQueryParam(queryParams.filter, 'formats') );
 
       this.set('sort_by',   queryParams.sort_by || undefined );
     }
