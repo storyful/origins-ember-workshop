@@ -5,7 +5,8 @@ let { get, set } = Ember;
 function serializeSearchFilter(type, search, params){
   return get(search, 'filter').map(filter => {
       if(filter.type === type){
-        set(filter, 'value', get(params, type).split(',').indexOf( filter.label ) > -1)
+        let values = get(params, type);
+        set(filter, 'value', values ? values.split(',').indexOf( filter.label ) > -1  : true)
       }
       return filter;
     })
