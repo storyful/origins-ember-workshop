@@ -1,8 +1,14 @@
 <header class="app--header">
   {{app-header}}
-  {{search-form params=model.params onUpdate="updateQueryParams"}}
+  {{search-form params=model.params
+      loading=loading
+      onSubmit=(route-action "updateQueryParams")}}
 </header>
 
 <div class="app--main">
-  {{search-results model=model}}
+  {{#if loading}}
+    <p class="text-center">Loading...</p>
+  {{else}}
+    {{search-results model=model.contents}}
+  {{/if}}
 </div>

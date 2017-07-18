@@ -2,6 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
-  classNames: 'app-header'.w(),
+  classNames: 'search-form-sorting'.w()
 
 });

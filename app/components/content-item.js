@@ -2,6 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
-  classNames: 'content-item'.w()
+  classNames: 'content-item'.w(),
 
 });
