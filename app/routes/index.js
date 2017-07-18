@@ -1,15 +1,10 @@
 import Ember from 'ember';
 
-const { get, set } = Ember;
-
-function filterToQueryParam(filters, type){
-  return filters
-    .filter(i => i.type === type)
-    .filter(i => i.value)
-    .map(i => i.label) || undefined;
-}
+const { get, set, inject } = Ember;
 
 export default Ember.Route.extend({
+
+  formSearchService: inject.service(),
 
   queryParams: {
     query:     { refreshModel: true },
@@ -54,9 +49,8 @@ export default Ember.Route.extend({
     },
 
     updateQueryParams(queryParams){
-      console.log('updateQueryParams', queryParams);
-
-      let ctrl = this.controller;
+      const ctrl = this.controller;
+      const filterToQueryParam = get(this, 'formSerializeService.filterToQueryParam');
 
       set(ctrl, 'query',     queryParams.query || undefined);
       set(ctrl, 'latlng',    queryParams.latlng || undefined);

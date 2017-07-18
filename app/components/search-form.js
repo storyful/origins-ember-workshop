@@ -1,40 +1,16 @@
 import Ember from 'ember';
 
-let { get, set, computed } = Ember;
-
-function serializeSearchFilter(type, search, params){
-  return get(search, 'filter').map(filter => {
-    if(filter.type === type){
-      let values = get(params, type);
-      set(filter, 'value', values ? values.split(',').indexOf( filter.label ) > -1  : true)
-    }
-    return filter;
-  });
-}
-
-const search = {
-  query: '',
-  latlng: '',
-  from_date: '',
-  to_date: '',
-  filter: [
-    { type: 'platforms', label: 'Instagram', icon: 'instagram', value: true },
-    { type: 'platforms', label: 'YouTube',   icon: 'youtube', value: true },
-    { type: 'platforms', label: 'Facebook',  icon: 'facebook', value: true },
-    { type: 'platforms', label: 'Twitter',   icon: 'twitter', value: true },
-    { type: 'formats',   label: 'Video',     icon: 'video-camera', value: true },
-    { type: 'formats',   label: 'Image',     icon: 'picture-o', value: true }
-  ],
-  sort_by: 'date'
-};
+let { get, set, computed, inject } = Ember;
 
 export default Ember.Component.extend({
+
+  formSearchService: inject.service(),
 
   tagName: 'form',
 
   init(){
     this._super(...arguments);
-    set(this, 'search', search);
+    set(this, 'search', get(this, 'formSearchService.search'));
     this.serializeParams( this.get('params') );
   },
 
@@ -56,6 +32,8 @@ export default Ember.Component.extend({
   serializeParams(){
     const search = get(this, 'search');
     const params = get(this.attrs, 'params');
+
+    const serializeSearchFilter = get(this, 'formSearchService.serializeSearchFilter');
 
     set(this, 'search.query',     get(this, 'params.query'));
     set(this, 'search.latlng',    get(this, 'params.latlng'));
