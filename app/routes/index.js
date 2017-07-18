@@ -1,8 +1,9 @@
 import Ember from 'ember';
+import RouteLoadingMixin from '../mixins/route-loading-mixin'
 
-const { get, set, inject } = Ember;
+const { get, set, setProperties, inject } = Ember;
 
-export default Ember.Route.extend({
+export default Ember.Route.extend(RouteLoadingMixin, {
 
   formSearchService: inject.service(),
 
@@ -13,7 +14,6 @@ export default Ember.Route.extend({
     platforms: { refreshModel: true },
     formats:   { refreshModel: true },
     latlng:    { refreshModel: true },
-    page:      { refreshModel: true },
     sort_by:   { refreshModel: true }
   },
 
@@ -27,39 +27,16 @@ export default Ember.Route.extend({
     if(params.query){
       hash.contents = this.store.query('content', params);
     }
-    console.log(hash);
+
     return Ember.RSVP.hash(hash);
   },
 
   actions: {
-    loading(transition, originRoute){
-      let previousRoute = this.previousRoute ? this.previousRoute() : null;
-      let controller    = this.controllerFor(originRoute.routeName);
-
-      if(previousRoute && previousRoute.name !== originRoute.routeName){ return true; }
-
-      controller.set('loading', true);
-
-      transition.promise.finally(() => {
-        controller.set('loading', false);
-        window.scrollTo(0,0);
-      });
-
-      return false;
-    },
-
     updateQueryParams(queryParams){
-      const ctrl = this.controller;
-      const filterToQueryParam = get(this, 'formSearchService.filterToQueryParam');
+      const serialize = get(this, 'formSearchService.serialize');
+      const props = serialize(queryParams);
 
-      set(ctrl, 'query',     queryParams.query || undefined);
-      set(ctrl, 'latlng',    queryParams.latlng || undefined);
-      set(ctrl, 'latlng',    queryParams.latlng || undefined);
-      set(ctrl, 'from_date', queryParams.from_date || undefined);
-      set(ctrl, 'to_date',   queryParams.to_date || undefined);
-      set(ctrl, 'platforms', filterToQueryParam(queryParams.filter, 'platforms') );
-      set(ctrl, 'formats',   filterToQueryParam(queryParams.filter, 'formats') );
-      set(ctrl, 'sort_by',   queryParams.sort_by || undefined );
+      setProperties(this.controller, props);
     }
   },
 

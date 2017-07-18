@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-let { get, set, computed, inject } = Ember;
+let { get, set, setProperties, computed, inject } = Ember;
 
 export default Ember.Component.extend({
 
@@ -10,8 +10,13 @@ export default Ember.Component.extend({
 
   init(){
     this._super(...arguments);
-    set(this, 'search', get(this, 'formSearchService.search'));
+    this.resetParams();
     this.serializeParams( this.get('params') );
+  },
+
+  didInsertElement(){
+    this._super(...arguments);
+    this.$('.search-form--input input:first').focus();
   },
 
   actions: {
@@ -29,18 +34,17 @@ export default Ember.Component.extend({
   canSubmit:         computed.and('hasQueryParams', 'isIdle'),
   isSubmitDisabled:  computed.not('canSubmit'),
 
+  resetParams(){
+    set(this, 'search', get(this, 'formSearchService.search'));
+  },
+
   serializeParams(){
-    const search = get(this, 'search');
-    const params = get(this.attrs, 'params');
+    const params    = get(this, 'params');
+    const search    = get(this, 'search');
+    const normalize = get(this, 'formSearchService.normalize');
+    const props     = normalize(search, params);
 
-    const serializeSearchFilter = get(this, 'formSearchService.serializeSearchFilter');
-
-    set(this, 'search.query',     get(this, 'params.query'));
-    set(this, 'search.latlng',    get(this, 'params.latlng'));
-    set(this, 'search.from_date', get(this, 'params.to_date'));
-    set(this, 'search.sort_by',   get(this, 'params.sort_by'));
-    set(this, 'search.filter',    serializeSearchFilter('platforms', search, params) );
-    set(this, 'search.filter',    serializeSearchFilter('formats', search, params) );
+    setProperties(this, props);
   }
 
 });
