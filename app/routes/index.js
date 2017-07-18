@@ -50,7 +50,7 @@ export default Ember.Route.extend({
 
     updateQueryParams(queryParams){
       const ctrl = this.controller;
-      const filterToQueryParam = get(this, 'formSerializeService.filterToQueryParam');
+      const filterToQueryParam = get(this, 'formSearchService.filterToQueryParam');
 
       set(ctrl, 'query',     queryParams.query || undefined);
       set(ctrl, 'latlng',    queryParams.latlng || undefined);
