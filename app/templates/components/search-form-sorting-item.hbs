@@ -1,1 +1,11 @@
+{{#if toggleValue}}
+  {{#if isSelected}}
+    {{if isToggled "▲" "▼"}}
+  {{else}}
+    {{if isReversed "▲" "▼"}}
+  {{/if}}
+{{else}}
+  {{if isReversed "▲" "▼"}}
+{{/if}}
+
 {{label}}

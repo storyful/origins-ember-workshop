@@ -11,11 +11,29 @@ export default Ember.Component.extend({
   classNameBindings: 'isSelected'.w(),
 
   click(){
-    this.set('selected', this.get('value'));
+    const props = this.getProperties('value', 'toggleValue', 'selected');
+
+    const newSelected = props.toggleValue ?
+                        (props.selected === props.value) ? props.toggleValue : props.value :
+                        props.value;
+
+    this.set('selected', newSelected);
   },
 
   isSelected: computed('selected', function(){
-    return this.get('selected') === this.get('value');
+    const props = this.getProperties('value', 'toggleValue', 'selected');
+
+    return props.toggleValue ?
+           (props.selected === props.value || props.selected === props.toggleValue) :
+           (props.selected === props.value);
+  }),
+
+  isReversed: computed('selected', function(){
+    return this.get('value').substring(0,1) === '-';
+  }),
+
+  isToggled: computed('selected', function(){
+    return this.get('selected') === this.get('toggleValue')
   })
 
 });
